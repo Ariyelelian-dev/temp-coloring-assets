@@ -1,0 +1,5 @@
+The images are located in the root of the repository.
+Workflow file is at .github/workflows/compile-pdf.yml.
+Triggered multiple times.
+Waiting for GitHub runner to finish.
+PDF should appear here shortly.
