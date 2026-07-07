@@ -1,0 +1,33 @@
+name: Compile Coloring Book PDF
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Install img2pdf
+        run: sudo apt-get update && sudo apt-get install -y img2pdf
+      
+      - name: Compile PDF
+        run: |
+          # Create a sorted list of images
+          # image_0.png, image_1.png, ..., image_19.png
+          FILES=$(ls image_*.png | sort -V)
+          echo "Compiling files: $FILES"
+          img2pdf $FILES -o coloring_book.pdf
+      
+      - name: Commit and push PDF
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add coloring_book.pdf
+          git commit -m "chore: update coloring_book.pdf" || echo "No changes to commit"
+          git push
